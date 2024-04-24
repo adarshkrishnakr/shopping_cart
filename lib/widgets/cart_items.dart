@@ -3,12 +3,13 @@ import 'package:provider/provider.dart';
 import 'package:toggle_theme/provider/cart_provider.dart';
 
 class CartItemTile extends StatelessWidget {
-  const CartItemTile({super.key, required this.id, required this.title, required this.price, required this.qty});
+  const CartItemTile({super.key, required this.id, required this.title, required this.price, required this.qty,required this.productId});
 
   final String id;
   final String title;
   final String price;
   final int qty;
+  final String productId;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,8 @@ class CartItemTile extends StatelessWidget {
           ],
         ) ,
         trailing: IconButton(onPressed: () {
-           Provider.of<Cart>(context,listen: false).removeItem(id);
+          print('Deleting item with id: $id');
+          Provider.of<Cart>(context,listen: false).removeItem(productId);
         }, icon: Icon(Icons.delete)),
       ),
 

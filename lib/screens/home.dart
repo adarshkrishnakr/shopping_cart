@@ -4,63 +4,70 @@ import 'package:toggle_theme/models/product.dart';
 import 'package:toggle_theme/provider/cart_provider.dart';
 import 'package:toggle_theme/provider/products_provider.dart';
 import 'package:toggle_theme/provider/theme_provider.dart';
+import 'package:toggle_theme/provider/toggle_view_provider.dart';
 import 'package:toggle_theme/screens/cartPage.dart';
+import 'package:toggle_theme/screens/productDetails.dart';
 import 'package:toggle_theme/widgets/gridProductItem.dart';
+import 'package:toggle_theme/widgets/listProductItem.dart';
 
 class HomePage extends StatelessWidget {
   static const id = '/HomePage';
-  HomePage({Key? key});
-
- 
 
   @override
   Widget build(BuildContext context) {
-    final productData= Provider.of<Products>(context);
+    final toggleView = Provider.of<ToggleView>(context);
+    final productData = Provider.of<Products>(context);
     final productList = productData.productList;
+
     return Scaffold(
-    appBar: AppBar(
-  backgroundColor: Colors.green,
-  title: Text('SHOPPING CART'),
-  centerTitle: true,
-  actions: [
-    IconButton(
-      onPressed: () {
-        Provider.of<ThemeProvider>(context, listen: false).changeTheme();
-      },
-      icon: Icon(Icons.dark_mode),
-    ),
-    Consumer<Cart>(
-      builder: (context, cart, _) => Stack(
-        alignment: Alignment.center,
-        children: [
+      appBar: AppBar(
+        backgroundColor: Colors.green,
+        title: Text('SHOPPING CART'),
+        centerTitle: true,
+        actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed('/cart-page.id');
+              Provider.of<ThemeProvider>(context, listen: false).changeTheme();
             },
-            icon: Icon(Icons.shopping_cart),
+            icon: Icon(Icons.dark_mode),
           ),
-          cart.items.isNotEmpty
-              ? Positioned(
-                  top: -1,
-                  right: 1,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.red,
-                    radius: 10,
-                    child: Text(
-                      cart.items.length.toString(),
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                )
-              : SizedBox(),
+          IconButton(onPressed: (){
+                       Provider.of<ToggleView>(context, listen: false).toggleViewType();
+                    }, icon: Icon(Icons.view_list)),
+          Consumer<Cart>(
+            builder: (context, cart, _) => Stack(
+              alignment: Alignment.center,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/cart-page.id');
+                  },
+                  icon: Icon(Icons.shopping_cart),
+                ),
+                cart.items.isNotEmpty
+                    ? Positioned(
+                        top: -1,
+                        right: 1,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.red,
+                          radius: 10,
+                          child: Text(
+                            cart.items.length.toString(),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      )
+                    : SizedBox(),
+
+                    
+              ],
+            ),
+          ),
         ],
       ),
-    ),
-  ],
-),
       drawer: Drawer(
         child: ListView(
           children: [
@@ -102,24 +109,33 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: GridView.builder(
-        padding: EdgeInsets.all(10),
-        itemCount: productList.length,
-        itemBuilder: (context, index) {
-          return ChangeNotifierProvider<Product>(
-            create: (BuildContext context)=> productList[index],
-            child: GridProductItem(
-             
-                 ),
-          );
-        },
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 1 / 1,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 30,
-        ),
-      ),
+      body: toggleView.isGridview
+          ? GridView.builder(
+              padding: EdgeInsets.all(10),
+              itemCount: productList.length,
+              itemBuilder: (context, index) {
+                return ChangeNotifierProvider<Product>.value(
+                  value: productList[index],
+                  child: GridProductItem(),
+                );
+              },
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 1 / 1,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 30,
+              ),
+            )
+          : ListView.builder(
+              itemCount: productList.length,
+              itemBuilder: (context, index) {
+                return ChangeNotifierProvider<Product>.value(
+                  value: productList[index],
+                  child: ListProductItem(),
+                );
+              },
+            ),
+      
     );
   }
 }

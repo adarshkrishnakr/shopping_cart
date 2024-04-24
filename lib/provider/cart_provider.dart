@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 
 class CartItem {
-  final String id;
+  final String id; // Use this as the unique identifier
+  final String productId; // Assuming productId is unique for each product
   final String title;
   final String price;
   final int qty;
 
   CartItem({
     required this.id,
+    required this.productId,
     required this.title,
     required this.price,
     required this.qty,
   });
 }
+
 
 class Cart with ChangeNotifier {
   Map<String, CartItem> _items = {};
@@ -30,6 +33,7 @@ class Cart with ChangeNotifier {
           productId,
           (value) => CartItem(
               id: value.id,
+              productId: value.productId,
               title: value.title,
               price: value.price,
               qty: value.qty + 1));
@@ -39,6 +43,7 @@ class Cart with ChangeNotifier {
           productId,
           () => CartItem(
               id: DateTime.now().toString(),
+              productId: productId,
               title: title,
               price: price,
               qty: 1));
@@ -46,7 +51,7 @@ class Cart with ChangeNotifier {
     }
   }
 
-   void removeItem(String productId) {
+  void removeItem(String productId) {
     _items.remove(productId);
     notifyListeners();
   }
