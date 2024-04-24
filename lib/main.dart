@@ -1,9 +1,14 @@
-import "package:flutter/material.dart";
-import "package:provider/provider.dart";
-import "package:toggle_theme/provider/theme_provider.dart";
-import "package:toggle_theme/screens/home.dart";
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:toggle_theme/provider/cart_provider.dart';
+import 'package:toggle_theme/provider/products_provider.dart';
+import 'package:toggle_theme/provider/theme_provider.dart';
+import 'package:toggle_theme/provider/toggle_view_provider.dart';
+import 'package:toggle_theme/screens/cartPage.dart';
+import 'package:toggle_theme/screens/home.dart';
+import 'package:toggle_theme/screens/productDetails.dart';
 
-void main(){
+void main() {
   runApp(MyApp());
 }
 
@@ -12,19 +17,33 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
-      builder: (context,child){
-        final provider = Provider.of<ThemeProvider>(context);
-      
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: provider.theme,
-        home: HomePage(),
-        
-      );
-      },
-      
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context)=>Products()),
+        ChangeNotifierProvider(create: (context)=>Cart()),
+        ChangeNotifierProvider(create: (context)=>ToggleView())
+      ],
+      child: Consumer<ThemeProvider>(
+        builder: (context, provider, child) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: provider.theme,
+            home: HomePage(),
+           
+            
+            routes: {
+              
+              '/product-details':(context)=>ProductDetails(),
+              '/cart-page.id': (context)=>CartPage(),
+              
+             
+             
+             
+            },
+          );
+        },
+      ),
     );
   }
 }
