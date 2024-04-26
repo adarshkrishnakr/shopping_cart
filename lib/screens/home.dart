@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget {
     final toggleView = Provider.of<ToggleView>(context);
     final productData = Provider.of<Products>(context);
     final productList = productData.productList;
-
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
@@ -41,6 +41,7 @@ class HomePage extends StatelessWidget {
                 IconButton(
                   onPressed: () {
                     Navigator.of(context).pushNamed('/cart-page.id');
+                    
                   },
                   icon: Icon(Icons.shopping_cart),
                 ),

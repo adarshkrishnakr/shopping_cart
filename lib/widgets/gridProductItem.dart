@@ -43,12 +43,21 @@ class GridProductItem extends StatelessWidget {
                 },
               ),
               trailing: IconButton(
-                icon: Icon(Icons.shopping_cart),
+                icon:product.isAdded?
+                 Icon(
+                  Icons.shopping_cart,
+                  color: Colors.red,
+                ):
+                Icon(Icons.shopping_cart),
                 onPressed: () {
+                  product.changeIconClr();
+                  
                   cart.addItem(
                       productId: product.id,
                       title: product.title,
                       price: product.price.toString());
+
+                  
                 },
               ),
             ),

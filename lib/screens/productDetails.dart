@@ -27,12 +27,13 @@ class ProductDetails extends StatelessWidget {
             Text('Price: \$${product.price.toString()}'),
             ElevatedButton(
               onPressed: () {
+                cart.addToCart();
 
                 cart.addItem(productId: product.id, title: product.title, price: product.price.toString());
 
               },
               child: Text(
-                "Add To Cart",
+                cart.addedToCart?"Added to cart":"Add to cart",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               style: ButtonStyle(

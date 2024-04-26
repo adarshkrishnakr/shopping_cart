@@ -7,6 +7,8 @@ class Product with ChangeNotifier{
   final String image;
   final double price;
   bool isFavourite;
+  bool isAdded;
+  
 
   Product({
     required this.id,
@@ -15,10 +17,19 @@ class Product with ChangeNotifier{
     required this.image,
     required this.price,
     this.isFavourite = false,
+    this.isAdded = false,
+    
   });
 
   void toggleFav(){
     isFavourite = !isFavourite;
     notifyListeners();
   }
+
+  void changeIconClr() {
+  isAdded = true;
+  notifyListeners();
+}
+
+
 }

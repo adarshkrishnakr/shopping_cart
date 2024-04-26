@@ -1,8 +1,10 @@
+
+
 import 'package:flutter/material.dart';
 
 class CartItem {
-  final String id; // Use this as the unique identifier
-  final String productId; // Assuming productId is unique for each product
+  final String id; 
+  final String productId; 
   final String title;
   final String price;
   final int qty;
@@ -23,6 +25,9 @@ class Cart with ChangeNotifier {
   Map<String, CartItem> get items {
     return {..._items};
   }
+
+  bool _addedToCart=false;
+  bool get addedToCart=>_addedToCart; 
 
   void addItem(
       {required String productId,
@@ -51,6 +56,11 @@ class Cart with ChangeNotifier {
     }
   }
 
+   void addToCart() {
+    _addedToCart = true;
+    notifyListeners();
+  }
+
   void removeItem(String productId) {
     _items.remove(productId);
     notifyListeners();
@@ -62,4 +72,8 @@ class Cart with ChangeNotifier {
 
     return total;
   }
+
+ 
+
+  
 }

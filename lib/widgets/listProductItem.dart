@@ -9,26 +9,38 @@ class ListProductItem extends StatelessWidget {
     final product = Provider.of<Product>(context);
     final cart = Provider.of<Cart>(context);
 
-    return ListTile(
-      leading: Image.asset(product.image),
-      title: Text(product.title),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Price: ${product.price.toString()}'),
-          SizedBox(height: 4),
-          Text('Description: ${product.description}'),
-        ],
-      ),
-      trailing: IconButton(
-        icon: Icon(Icons.add_shopping_cart),
-        onPressed: () {
-          cart.addItem(
-            productId: product.id,
-            title: product.title,
-            price: product.price.toString(),
-          );
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18),
+      child: ListTile(
+        onTap: () {
+          Navigator.pushNamed(context, '/product-details',
+              arguments: product.id);
         },
+        leading: Image.asset(product.image),
+        title: Text(product.title),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Price: ${product.price.toString()}'),
+            SizedBox(height: 4),
+            Text('Description: ${product.description}'),
+          ],
+        ),
+        trailing: IconButton(
+          icon:product.isAdded?
+           Icon(Icons.add_shopping_cart,
+           color: Colors.red,
+           ):
+           Icon(Icons.add_shopping_cart),
+          onPressed: () {
+            product.changeIconClr();
+            cart.addItem(
+              productId: product.id,
+              title: product.title,
+              price: product.price.toString(),
+            );
+          },
+        ),
       ),
     );
   }
